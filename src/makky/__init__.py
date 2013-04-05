@@ -1,7 +1,7 @@
 import os
 import urlparse
 from webob.dec import wsgify
-from webob.exc import HTTPFound
+from webob.exc import HTTPFound, HTTPNotFound
 from mako.lookup import TemplateLookup
 from mako.template import Template
 
@@ -25,6 +25,9 @@ class Makky(object):
             path = path[1:]
 
         path = os.path.abspath(os.path.normpath(os.path.join(self.root, path)))
+        if not os.path.exists(path):
+            return HTTPNotFound()
+
         if os.path.isdir(path):
             parts = urlparse.urlparse(request.url)
             parts = urlparse.ParseResult(scheme=parts.scheme,
@@ -41,6 +44,26 @@ class Makky(object):
 
         return tmpl.render(request=request)
 
+
+truthy = frozenset(['true', 'yes', 'on', 'y', 't', '1'])
+falsy = frozenset(['false', 'no', 'off', 'n', 'f', '0'])
+
+
+def asbool(obj):
+    if isinstance(obj, basestring):
+        obj = obj.strip().lower()
+        if obj in truthy:
+            return True
+        elif obj in falsy:
+            return False
+        else:
+            raise ValueError("String is not true/false: %r" % obj)
+    return bool(obj)
+
 def main(global_conf, root, directories=[], **app_conf):
+    debug = asbool(app_conf.get('debug'))
     app = Makky(root=root, directories=directories)
+    if debug:
+        import backlash
+        app = backlash.DebuggedApplication(app)
     return app
