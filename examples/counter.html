@@ -1,0 +1,24 @@
+<%
+conn = db.connect()
+cur = conn.cursor()
+if 'add-action' in request.POST:
+    name = request.POST['name']
+    cur.execute("INSERT INTO Person (name) VALUES (%s)", (name,))
+    conn.commit()
+
+cur.execute("SELECT * FROM Person")
+people = cur.fetchall()
+cur.close()
+conn.close()
+%>
+
+<form action="${request.url}" method="post">
+<input type="text" name="name">
+<button type="submit" name="add-action">Add</button>
+</form>
+
+<ul>
+%for person in people:
+<li>${person[0]} ${person[1].decode('utf-8')}</li>
+%endfor
+</ul>

@@ -11,6 +11,8 @@ requires = [
     "gearbox",
     "gunicorn",
     "backlash",
+    "webhelpers2",
+    "paginate",
 ]
 
 tests_require = [
@@ -34,6 +36,7 @@ setup(name="makky",
       tests_require=tests_require,
       extras_require={
           "testing": tests_require,
+          "pgsql": ['psycopg2'],
       },
       packages=find_packages('src'),
       package_dir={"": "src"},

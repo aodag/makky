@@ -3,6 +3,8 @@ Makky
 
 Makky is mako template application like PHP.
 
+.. contents::
+
 
 INSTALL
 ----------------------
@@ -40,9 +42,46 @@ And put the template file named ``index.html`` to ``app`` directory::
       </body>
     </html>
 
+The template uses syntax of `Mako <http://www.makotemplates.org>`_.
 
+Application directory structure::
+
+   yourapp
+   ├─ app.ini
+   └─ app
+       └─ index.html
+   
 
 It's wsgi application. 
 You can run this application with ``gearbox serve``::
 
     $ gearbox serve app.ini
+
+
+CONFIG
+----------------------
+
+debug
+  if true, enable web debugger of ``backlash``.
+
+static
+   specify static directories with mount names.
+
+
+VARIABLES
+--------------------------
+
+In template, you can use the variables such as below:
+
+request
+  request object of ``WebOb``.
+
+request.session
+  http session of ``Beaker``
+
+paginate
+  pagienate
+
+h
+  helpers of ``WebHelpers2``
+
