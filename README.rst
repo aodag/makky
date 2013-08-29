@@ -24,7 +24,7 @@ Create your application directory and put ``app.ini`` ::
     root = %(here)s/app
 
     [server:main]
-    use = egg:makky
+    use = egg:gunicorn#main
     host = 0.0.0.0
     port = 8888
 
@@ -55,7 +55,7 @@ Application directory structure::
 It's wsgi application. 
 You can run this application with ``gearbox serve``::
 
-    $ gearbox serve app.ini
+    $ gearbox serve -c app.ini
 
 
 CONFIG
